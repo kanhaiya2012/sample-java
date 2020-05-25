@@ -27,7 +27,7 @@ public class SendBuilder {
     }
 
     /**
-     * email address representing the sender of the mail
+     * Email address representing the sender of the mail
      */
     public SendBuilder from(From from) {
         send.setFrom(from);
@@ -74,9 +74,6 @@ public class SendBuilder {
         return this;
     }
 
-    /**
-     * Enable/Disable settings like click, open and unsubscribe track
-     */
     public SendBuilder settings(Settings settings) {
         send.setSettings(settings);
         return this;

@@ -18,9 +18,6 @@ public class ContentBuilder {
         content = new Content();
     }
 
-    /**
-     * content in text/plain format
-     */
     public ContentBuilder type(TypeEnum type) {
         content.setType(type);
         return this;

@@ -79,14 +79,8 @@ public abstract class BaseController {
             throws APIException {
         //get response status code to validate
         int responseCode = _response.getStatusCode();
-        if (responseCode == 400) {
-            throw new APIException("Bad request", context);
-        }
-
         if ((responseCode < 200) || (responseCode > 208)) { //[200,208] = HTTP OK
-            if(!(responseCode == 401 || responseCode == 400 || responseCode == 403)) {
-                throw new APIException("HTTP Response Not OK", context);
-            }
+            throw new APIException("HTTP Response Not OK", context);
         }
     }
 }

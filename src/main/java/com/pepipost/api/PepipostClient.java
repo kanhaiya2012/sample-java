@@ -10,11 +10,107 @@ import com.pepipost.api.http.client.HttpClient;
 
 public class PepipostClient {
     /**
-     * Singleton access to Send controller
-     * @return	Returns the SendController instance 
+     * Singleton access to MailSend controller
+     * @return	Returns the MailSendController instance 
      */
-    public SendController getSend() {
-        return SendController.getInstance();
+    public MailSendController getMailSend() {
+        return MailSendController.getInstance();
+    }
+
+    /**
+     * Singleton access to Events controller
+     * @return	Returns the EventsController instance 
+     */
+    public EventsController getEvents() {
+        return EventsController.getInstance();
+    }
+
+    /**
+     * Singleton access to Stats controller
+     * @return	Returns the StatsController instance 
+     */
+    public StatsController getStats() {
+        return StatsController.getInstance();
+    }
+
+    /**
+     * Singleton access to Subaccounts controller
+     * @return	Returns the SubaccountsController instance 
+     */
+    public SubaccountsController getSubaccounts() {
+        return SubaccountsController.getInstance();
+    }
+
+    /**
+     * Singleton access to SubaccountsDelete controller
+     * @return	Returns the SubaccountsDeleteController instance 
+     */
+    public SubaccountsDeleteController getSubaccountsDelete() {
+        return SubaccountsDeleteController.getInstance();
+    }
+
+    /**
+     * Singleton access to SubaccountsGetSubAccounts controller
+     * @return	Returns the SubaccountsGetSubAccountsController instance 
+     */
+    public SubaccountsGetSubAccountsController getSubaccountsGetSubAccounts() {
+        return SubaccountsGetSubAccountsController.getInstance();
+    }
+
+    /**
+     * Singleton access to Setrecurringcreditddetails controller
+     * @return	Returns the SetrecurringcreditddetailsController instance 
+     */
+    public SetrecurringcreditddetailsController getSetrecurringcreditddetails() {
+        return SetrecurringcreditddetailsController.getInstance();
+    }
+
+    /**
+     * Singleton access to SubaccountsSetsubaccountcredit controller
+     * @return	Returns the SubaccountsSetsubaccountcreditController instance 
+     */
+    public SubaccountsSetsubaccountcreditController getSubaccountsSetsubaccountcredit() {
+        return SubaccountsSetsubaccountcreditController.getInstance();
+    }
+
+    /**
+     * Singleton access to SubaccountsUpdateSubaccount controller
+     * @return	Returns the SubaccountsUpdateSubaccountController instance 
+     */
+    public SubaccountsUpdateSubaccountController getSubaccountsUpdateSubaccount() {
+        return SubaccountsUpdateSubaccountController.getInstance();
+    }
+
+    /**
+     * Singleton access to SubaccountsCreateSubaccount controller
+     * @return	Returns the SubaccountsCreateSubaccountController instance 
+     */
+    public SubaccountsCreateSubaccountController getSubaccountsCreateSubaccount() {
+        return SubaccountsCreateSubaccountController.getInstance();
+    }
+
+    /**
+     * Singleton access to Suppression controller
+     * @return	Returns the SuppressionController instance 
+     */
+    public SuppressionController getSuppression() {
+        return SuppressionController.getInstance();
+    }
+
+    /**
+     * Singleton access to DomainDelete controller
+     * @return	Returns the DomainDeleteController instance 
+     */
+    public DomainDeleteController getDomainDelete() {
+        return DomainDeleteController.getInstance();
+    }
+
+    /**
+     * Singleton access to Domain controller
+     * @return	Returns the DomainController instance 
+     */
+    public DomainController getDomain() {
+        return DomainController.getInstance();
     }
 
     /**
@@ -37,7 +133,6 @@ public class PepipostClient {
      * Default constructor 
      */     
     public PepipostClient() {
-        Configuration.apiKey = "4D51B3ECA2D4ED3A67E4E043B3F1A4D1";
     }
 
     /**
@@ -45,6 +140,6 @@ public class PepipostClient {
      */     
     public PepipostClient(String apiKey) {
         this();
-        if(apiKey != null) Configuration.apiKey = apiKey;
+        Configuration.apiKey = apiKey;
     }
 }

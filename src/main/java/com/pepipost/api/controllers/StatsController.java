@@ -8,8 +8,7 @@ package com.pepipost.api.controllers;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
+import org.joda.time.LocalDate;
 
 import com.pepipost.api.*;
 import com.pepipost.api.models.*;
@@ -22,20 +21,20 @@ import com.pepipost.api.http.response.HttpStringResponse;
 import com.pepipost.api.http.client.APICallBack;
 import com.pepipost.api.controllers.syncwrapper.APICallBackCatcher;
 
-public class SendController extends BaseController {
+public class StatsController extends BaseController {
     //private static variables for the singleton pattern
     private static final Object syncObject = new Object();
-    private static SendController instance = null;
+    private static StatsController instance = null;
 
     /**
      * Singleton pattern implementation 
-     * @return The singleton instance of the SendController class 
+     * @return The singleton instance of the StatsController class 
      */
-    public static SendController getInstance() {
+    public static StatsController getInstance() {
         if (null == instance) {
             synchronized (syncObject) {
                 if (null == instance) {
-                    instance = new SendController();
+                    instance = new StatsController();
                 }
             }
         }
@@ -43,27 +42,43 @@ public class SendController extends BaseController {
     }
 
     /**
-     * The endpoint send is used to generate the request to pepipost server for sending an email to recipients.
-     * @param    body    Required parameter: New mail request will be generated
+     * Lets you fetch all the subaccounts created by you
+     * @param    startdate    Required parameter: The starting date of the statistics to retrieve. Must follow format YYYY-MM-DD.
+     * @param    enddate    Optional parameter: The end date of the statistics to retrieve. Defaults to today. Must follow format YYYY-MM-DD.
+     * @param    aggregatedBy    Optional parameter: Example: 
+     * @param    offset    Optional parameter: Example: 1
+     * @param    limit    Optional parameter: Example: 100
      * @return    Returns the Object response from the API call 
      */
-    public Object createGenerateTheMailSendRequest(
-                final Send body
+    public Object getStatsGET(
+                final LocalDate startdate,
+                final LocalDate enddate,
+                final AggregatedByEnum aggregatedBy,
+                final Integer offset,
+                final Integer limit
     ) throws Throwable {
 
-        HttpRequest _request = _buildCreateGenerateTheMailSendRequestRequest(body);
+        HttpRequest _request = _buildGetStatsGETRequest(startdate, enddate, aggregatedBy, offset, limit);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleCreateGenerateTheMailSendRequestResponse(_context);
+        return _handleGetStatsGETResponse(_context);
     }
 
     /**
-     * The endpoint send is used to generate the request to pepipost server for sending an email to recipients.
-     * @param    body    Required parameter: New mail request will be generated
+     * Lets you fetch all the subaccounts created by you
+     * @param    startdate    Required parameter: The starting date of the statistics to retrieve. Must follow format YYYY-MM-DD.
+     * @param    enddate    Optional parameter: The end date of the statistics to retrieve. Defaults to today. Must follow format YYYY-MM-DD.
+     * @param    aggregatedBy    Optional parameter: Example: 
+     * @param    offset    Optional parameter: Example: 1
+     * @param    limit    Optional parameter: Example: 100
      */
-    public void createGenerateTheMailSendRequestAsync(
-                final Send body,
+    public void getStatsGETAsync(
+                final LocalDate startdate,
+                final LocalDate enddate,
+                final AggregatedByEnum aggregatedBy,
+                final Integer offset,
+                final Integer limit,
                 final APICallBack<Object> callBack
     ) {
         Runnable _responseTask = new Runnable() {
@@ -71,7 +86,7 @@ public class SendController extends BaseController {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildCreateGenerateTheMailSendRequestRequest(body);
+                    _request = _buildGetStatsGETRequest(startdate, enddate, aggregatedBy, offset, limit);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -81,7 +96,7 @@ public class SendController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            Object returnValue = _handleCreateGenerateTheMailSendRequestResponse(_context);
+                            Object returnValue = _handleGetStatsGETResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -101,15 +116,36 @@ public class SendController extends BaseController {
     }
 
     /**
-     * Builds the HttpRequest object for createGenerateTheMailSendRequest
+     * Builds the HttpRequest object for getStatsGET
      */
-    private HttpRequest _buildCreateGenerateTheMailSendRequestRequest(
-                final Send body) throws IOException, APIException {
+    private HttpRequest _buildGetStatsGETRequest(
+                final LocalDate startdate,
+                final LocalDate enddate,
+                final AggregatedByEnum aggregatedBy,
+                final Integer offset,
+                final Integer limit) throws IOException, APIException {
         //the base uri for api requests
-        String _baseUri = Configuration.getBaseUri(Servers.SERVER1);
+        String _baseUri = Configuration.baseUri;
 
         //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/send");
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/stats");
+
+        //process query parameters
+        Map<String, Object> _queryParameters = new HashMap<String, Object>();
+        _queryParameters.put("startdate", DateTimeHelper.toSimpleDate(startdate));
+        if (enddate != null) {
+            _queryParameters.put("enddate", DateTimeHelper.toSimpleDate(enddate));
+        }
+        if (aggregatedBy != null) {
+            _queryParameters.put("aggregated_by", (aggregatedBy != null) ? aggregatedBy.value() : null);
+        }
+        if (offset != null) {
+            _queryParameters.put("offset", (offset != null) ? offset : 1);
+        }
+        if (limit != null) {
+            _queryParameters.put("limit", (limit != null) ? limit : 100);
+        }
+        APIHelper.appendUrlWithQueryParameters(_queryBuilder, _queryParameters);
         //validate and preprocess url
         String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
 
@@ -117,12 +153,10 @@ public class SendController extends BaseController {
         Map<String, String> _headers = new HashMap<String, String>();
         _headers.put("api_key", Configuration.apiKey);
         _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body));
+        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null);
 
         // Invoke the callback before request if its not null
         if (getHttpCallBack() != null) {
@@ -133,10 +167,10 @@ public class SendController extends BaseController {
     }
 
     /**
-     * Processes the response for createGenerateTheMailSendRequest
-     * @return An object of type List<String>
+     * Processes the response for getStatsGET
+     * @return An object of type Object
      */
-    private Object _handleCreateGenerateTheMailSendRequestResponse(HttpContext _context)
+    private Object _handleGetStatsGETResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -148,6 +182,15 @@ public class SendController extends BaseController {
         //Error handling using HTTP status codes
         int _responseCode = _response.getStatusCode();
 
+        if (_responseCode == 400) {
+            throw new APIException("API Response", _context);
+        }
+        if (_responseCode == 401) {
+            throw new APIException("API Response", _context);
+        }
+        if (_responseCode == 403) {
+            throw new APIException("API Response", _context);
+        }
         if (_responseCode == 405) {
             throw new APIException("Invalid input", _context);
         }
@@ -156,8 +199,7 @@ public class SendController extends BaseController {
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        Object _result = APIHelper.deserialize(_responseBody,
-									new TypeReference<Object>(){});
+        Object _result = _responseBody;
 
         return _result;
     }

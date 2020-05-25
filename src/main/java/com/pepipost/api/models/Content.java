@@ -18,7 +18,7 @@ public class Content
     private TypeEnum type;
     private String value;
     /** GETTER
-     * content in text/plain format
+     * TODO: Write general description for this method
      */
     @JsonGetter("type")
     public TypeEnum getType ( ) { 
@@ -26,7 +26,7 @@ public class Content
     }
     
     /** SETTER
-     * content in text/plain format
+     * TODO: Write general description for this method
      */
     @JsonSetter("type")
     public void setType (TypeEnum value) { 

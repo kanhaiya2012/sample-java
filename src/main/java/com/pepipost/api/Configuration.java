@@ -5,51 +5,13 @@
  */
 package com.pepipost.api;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.pepipost.api.models.*;
 
 public class Configuration {
+    //The base Uri for API calls
+    public static String baseUri = "https://api.pepipost.com/v5";
+
     //Your Pepipost API Key. You will find the api key in the Pepipost application in Integrations.
     //TODO: Replace the apiKey with an appropriate value
-    public static String apiKey = "4D51B3ECA2D4ED3A67E4E043B3F1A4D1";
+    public static String apiKey = "";
 
-    /**
-     * Current API environment
-     */
-    public static Environments environment = Environments.PRODUCTION;
-
-    /**
-     * Get base URI by current environment
-     * @param server Server for which to get the base URI
-     * @return Processed base URI
-     */
-    public static String getBaseUri(Servers server) {
-        StringBuilder baseUrl = new StringBuilder(environmentMapper(Configuration.environment, server));
-        Map<String, Object> parameters = new HashMap<String, Object>();
-        APIHelper.appendUrlWithTemplateParameters(baseUrl, parameters);
-        return baseUrl.toString();
-    }
-    
-    /**
-     * Get base URI by current environment
-     * @return Processed base URI
-     */
-    public static String getBaseUri() {
-        return Configuration.getBaseUri(Servers.SERVER1);
-    }
-    
-    /**
-     * Base URLs by environments and server aliases 
-     */
-
-    private static String environmentMapper(Environments environments, Servers servers) {
-		String url = "";
-		if(environments.equals(Environments.PRODUCTION)) {
-			if(servers.equals(Servers.SERVER1))
-				url = "https://api.pepipost.com/v5/mail";
-		}
-		return url;
-	}
 }

@@ -44,7 +44,7 @@ public class Send
     }
  
     /** GETTER
-     * email address representing the sender of the mail
+     * Email address representing the sender of the mail
      */
     @JsonGetter("from")
     public From getFrom ( ) { 
@@ -52,7 +52,7 @@ public class Send
     }
     
     /** SETTER
-     * email address representing the sender of the mail
+     * Email address representing the sender of the mail
      */
     @JsonSetter("from")
     public void setFrom (From value) { 
@@ -140,7 +140,7 @@ public class Send
     }
  
     /** GETTER
-     * Enable/Disable settings like click, open and unsubscribe track
+     * TODO: Write general description for this method
      */
     @JsonGetter("settings")
     public Settings getSettings ( ) { 
@@ -148,7 +148,7 @@ public class Send
     }
     
     /** SETTER
-     * Enable/Disable settings like click, open and unsubscribe track
+     * TODO: Write general description for this method
      */
     @JsonSetter("settings")
     public void setSettings (Settings value) { 
